@@ -1,0 +1,322 @@
+task t << {
+
+	/* operators */
+	assert  1  + 2 == 3
+	assert  4  - 3 == 1
+	assert  3  * 5 == 15
+	assert  3  / 2 == 1.5
+	assert 10  % 3 == 1
+	assert  2 ** 3 == 8
+
+	/* Unary operators */
+
+	assert +3 == 3
+	assert -4 == 0 - 4
+
+	assert -(-1) == 1  
+
+	/* ++ & -- */
+	def a = 2
+	def b = a++ * 3             
+
+	assert a == 3 && b == 6
+
+	def c = 3
+	def d = c-- * 2             
+
+	assert c == 2 && d == 6
+
+	def e = 1
+	def f = ++e + 3             
+
+	assert e == 2 && f == 5
+
+	def g = 4
+	def h = --g + 1             
+
+	assert g == 3 && h == 4
+
+	/* Assignment arithmetic operators */
+
+	/*def*/ a = 4
+	a += 3
+
+	assert a == 7
+
+	/*def*/ b = 5
+	b -= 3
+
+	assert b == 2
+
+	/*def*/ c = 5
+	c *= 3
+
+	assert c == 15
+
+	/*def*/ d = 10
+	d /= 2
+
+	assert d == 5
+
+	/*def*/ e = 10
+	e %= 3
+
+	assert e == 1
+
+	/*def*/ f = 3
+	f **= 2
+
+	assert f == 9
+
+	/* Relational operators */
+
+	assert 1 + 2 == 3
+	assert 3 != 4
+
+	assert -2 < 3
+	assert 2 <= 2
+	assert 3 <= 4
+
+	assert 5 > 1
+	assert 5 >= -2
+
+	/*  Logical operators */
+
+	assert !false           
+	assert true && true     
+	assert true || false    
+
+	/* The logical "not" has a higher priority than the logical "and". */
+
+	assert (!false && false) == false   
+
+	/* The logical "and" has a higher priority than the logical "or".*/
+
+	assert true || true && false
+
+	/* Short-circuiting */
+
+
+/*
+	called = false
+	true || checkIfCalled()
+	assert !called              
+
+	called = false
+	false || checkIfCalled()
+	assert called               
+
+	called = false
+	false && checkIfCalled()
+	assert !called              
+
+	called = false
+	true && checkIfCalled()
+	assert called              
+*/
+
+	/* Bitwise operators */
+	/*int*/ a = 0b00101010
+	assert a==42
+	/*int*/ b = 0b00001000
+	assert b==8
+	assert (a & a) == a                     
+	assert (a & b) == b                     
+	assert (a | a) == a                     
+	assert (a | b) == a                     
+
+	int mask = 0b11111111                   
+	assert ((a ^ a) & mask) == 0b00000000   
+	assert ((a ^ b) & mask) == 0b00100010   
+	assert ((~a) & mask)    == 0b11010101   
+
+	/* Conditional operators */
+
+	/* Not operator */
+	assert (!true)    == false                      
+	assert (!'foo')   == false                      
+	assert (!'')      == true                       
+
+	/*Ternary operator*/
+	String string = 'abc'
+	def result = string ? 'Found' : 'Not found'
+	println 'string = [' + string + ']'
+	println 'result = [' + result + ']'
+
+	/*Elvis operator*/
+
+	/* Pattern operator */
+	def p = ~/foo/
+	assert p instanceof java.util.regex.Pattern
+
+	def pattern = 'abc'
+
+	p = ~'foo'                                                        
+	p = ~"foo"                                                        
+	p = ~$/dollar/slashy $ string/$                                   
+	p = ~"${pattern}"
+
+	/* Find operator */
+
+	def text = "some text to match"
+	def m = text =~ /match/                                           
+	assert m instanceof java.util.regex.Matcher                                       
+	println "m.toString() = " + m.toString()
+	if (!m) {                                                         
+		    throw new RuntimeException("Oops, text not found!")
+	}
+	else {
+		println "m.find() = " + m.find()
+		println "m.find(0) = " + m.find(0)
+	}
+
+	/* Match operator */
+
+	m = text ==~ /match/                                              
+	assert m instanceof Boolean                                       
+	if (m) {                                                          
+		    throw new RuntimeException("Should not reach that point!")
+	}
+
+	/* Spread operator */
+
+	def cars = [
+		new Car(make: 'Peugeot', model: '508'),
+		new Car(make: 'Renault', model: 'Clio')]       
+	def makes = cars*.make                                
+	assert makes == ['Peugeot', 'Renault']                
+
+	println 'makes = ' + makes.toString()
+
+	cars = [
+		new Car(make: 'Peugeot', model: '508'),
+		null,                                              
+		new Car(make: 'Renault', model: 'Clio')]
+	assert cars*.make == ['Peugeot', null, 'Renault']     
+	assert null*.make == null 
+	def nullObj = null
+
+	/* The spread operator can be used on any class which implements the Iterable interface: */
+
+	def compositeobj = new CompositeObject()
+	assert compositeobj*.id == [1, 2]
+	assert compositeobj*.name == ['Foo', 'Bar']
+	println "ids = " + compositeobj*.id
+	println "names = " + compositeobj*.name
+
+	/* Spreading method arguments */
+	def args = [4, 5, 6]
+	assert function(*args) == 26
+	args = [4]
+	assert function(*args,5,6) == 26
+
+	/* Spread list elements */
+
+	def items = [4,5]                      
+	def list = [1,2,3,*items,6]            
+	assert list == [1,2,3,4,5,6]           
+	println 'list = ' + list
+
+	/* Spread map elements */
+
+	def m1 = [c:3, d:4]                   
+	def map = [a:1, b:2, *:m1]            
+	assert map == [a:1, b:2, c:3, d:4]    
+
+	/* Range operator */
+	def range = 0..5                                    
+	assert (0..5).collect() == [0, 1, 2, 3, 4, 5]       
+	assert (0..<5).collect() == [0, 1, 2, 3, 4]         
+	assert (0..5) instanceof List                       
+	assert (0..5).size() == 6                           
+	println '(0..5).class = ' + (0..5).class
+	println "('a'..'Z') = " + ('a'..'Z')
+	println "('a'..'z') = " + ('a'..'z')
+	println "('A'..'z') = " + ('A'..'z')
+
+	/* Spaceship operator */
+	assert (1 <=> 1) == 0
+	assert (1 <=> 2) == -1
+	assert (2 <=> 1) == 1
+	assert ('a' <=> 'z') == -1
+
+	/* subscript operator */
+	/*def*/ list = [0,1,2,3,4]
+	assert list[2] == 2                         
+	list[2] = 4                                 
+	assert list[0..2] == [0,1,4]                
+	list[0..2] = [6,6,6]                        
+	assert list == [6,6,6,3,4]                  
+	list.putAt(0, 1)
+	println 'list = ' + list
+	list.putAt(0..1, 5)
+	println 'list = ' + list
+	list.putAt(10..0, [10..0])
+	println 'list = ' + list
+
+	/* The subscript operator, in combination with a custom implementation of getAt\/putAt is a convenient way for destructuring objects: */
+	def user = new User(id: 1, name: 'Alex')                           
+	assert user[0] == 1                                                
+	assert user[1] == 'Alex'                                           
+	user[1] = 'Bob'                                                    
+	assert user.name == 'Bob'                                          
+	println 'user :' + user	
+	println 'user.@name = ' + user.@name
+	println 'user.name = ' + user.name
+	println 'user[1] = ' + user[1]
+	println 'user.@id = ' + user.@id
+	println 'user.id = ' + user.id
+	println 'user[0] = ' + user[0]
+}
+
+class Car {
+	String make
+	String model
+}
+
+class Component {
+	    Long id
+	        String name
+}
+
+int function(int x, int y, int z) {
+	    x*y+z
+}
+
+def called = false
+
+boolean checkIfCalled() {   
+	    called = true
+}
+
+class CompositeObject implements Iterable<Component> {
+	def components = [
+		new Component(id: 1, name: 'Foo'),
+		new Component(id: 2, name: 'Bar')]
+
+	@Override
+	Iterator<Component> iterator() {
+		components.iterator()
+	}
+}
+class User {
+	Long id
+	String name
+	def getAt(int i) {                                             
+			switch (i) {
+				case 0: return id
+				case 1: return name
+			}
+			throw new IllegalArgumentException("No such element $i")
+	}
+	void putAt(int i, def value) {                                 
+		switch (i) {
+			case 0: id = value; return
+			case 1: name = value; return
+		}
+		throw new IllegalArgumentException("No such element $i")
+	}
+	String toString() {
+		return 'id:' + id + ', name:' + name
+	}
+}
