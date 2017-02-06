@@ -279,7 +279,53 @@ task t << {
 	println " list.isCase('Emmy') :" + list.isCase('Emmy')
 
 	/* Identity operator */
+	def list1 = ['Groovy 1.8','Groovy 2.0','Groovy 2.3']        
+	def list2 = ['Groovy 1.8','Groovy 2.0','Groovy 2.3']        
+	assert list1 == list2                                       
+	assert !list1.is(list2)                                     
 
+	/* Coercion operator */
+	Integer x = 123
+	String s = (String) x
+	println "s = " + s
+	println "x = " + x
+
+	s = x as String
+	println "s = " + s
+
+	/* asType */
+	def u = new User(name: 'Xavier')                                            
+	def id = u as Identifiable                                                   
+	assert id instanceof Identifiable                                            
+	assert !(id instanceof User)  
+
+	/* Diamond operator */
+	List<String> strings = new LinkedList<>()
+
+	/* Call operator */
+	def mc = new MyCallable()
+	assert mc.call(2) == 4          
+	assert mc(2) == 4 
+
+	/* Operator overloading */
+	def b1 = new Bucket(4)
+	def b2 = new Bucket(11)
+	assert (b1 + b2).size == 15
+	assert (b1.plus(b2)).size == 15
+
+	assert (b1 - b2).size == -7
+	assert (b1.minus(b2)).size == -7
+
+	assert (b1 * b2).size == 44
+	assert (b1.multiply(b2)).size == 44
+
+	println '(b2.mod(b1)).size = ' + (b2.mod(b1)).size
+	println '(b2 % b1).size = ' + (b2 % b1).size
+
+	println '(b2.div(b1)).size = ' + (b2.div(b1)).size
+/*
+	println '(b2 / b1).size = ' + (b2 / b1).size
+*/
 }
 
 class Car {
@@ -312,6 +358,11 @@ class CompositeObject implements Iterable<Component> {
 		components.iterator()
 	}
 }
+
+class Identifiable {
+	    String name
+}
+
 class User {
 	Long id
 	String name
@@ -332,4 +383,44 @@ class User {
 	String toString() {
 		return 'id:' + id + ', name:' + name
 	}
+	def asType(Class target) {                                              
+		if (target==Identifiable) {
+			return new Identifiable(name: name)
+		}
+		throw new ClassCastException("User cannot be coerced into $target")
+	}
+}
+
+class MyCallable {
+	int call(int x) {           
+		2*x
+	}
+}
+
+class Bucket {
+	int size
+
+	Bucket(int size) { this.size = size }
+	Bucket(BigDecimal size) { this.size = size as int}
+
+	Bucket plus(Bucket other) {                     
+		return new Bucket(this.size + other.size)
+	}
+
+	Bucket minus(Bucket other) {                     
+		return new Bucket(this.size - other.size)
+	}
+
+	Bucket multiply(Bucket other) {                     
+		return new Bucket(this.size * other.size)
+	}
+
+	Bucket mod(Bucket other) {                     
+		return new Bucket(this.size % other.size)
+	}
+
+	Bucket div(Bucket other) {                     
+		return new Bucket(this.size / other.size)
+	}
+
 }
