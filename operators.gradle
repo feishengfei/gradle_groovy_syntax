@@ -267,6 +267,19 @@ task t << {
 	println 'user.@id = ' + user.@id
 	println 'user.id = ' + user.id
 	println 'user[0] = ' + user[0]
+
+	/* Membership operator */
+
+	/* The membership operator (in) is equivalent to calling the isCase method. In the context of a List, it is equivalent to calling contains, like in the following example:*/
+
+	list = ['Grace','Rob','Emmy']
+	assert ('Emmy' in list) 
+	println ' Emmy in list :' + ('Emmy' in list) 
+	println " list.contains('Emmy') :" + list.contains('Emmy')
+	println " list.isCase('Emmy') :" + list.isCase('Emmy')
+
+	/* Identity operator */
+
 }
 
 class Car {
