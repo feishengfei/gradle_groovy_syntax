@@ -1,0 +1,26 @@
+/* static import */
+import static Boolean.FALSE
+
+/* static import alias */
+import static Calendar.getInstance as now
+
+/* static start import */
+import static java.lang.Math.*
+
+
+/* import aliasing */
+
+task t << {
+	assert !FALSE
+	assert now().class == Calendar.getInstance().class
+	println 'now().class = ' + now().class
+
+	println 'sin(0) = ' + sin(0)
+	println 'cos(0) = ' + cos(0)
+}
+
+public class MultiplyTwo {
+	def static multiply(def value) {
+		return value * 3 //intentionally wrong.
+	}
+}
