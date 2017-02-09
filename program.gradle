@@ -16,7 +16,11 @@ task t << {
 	println 'now().class = ' + now().class
 
 	println 'sin(0) = ' + sin(0)
+	println 'sin(PI/2) = ' + sin(java.lang.Math.PI / 2.0)
+	println 'sin(PI/6) = ' + sin(java.lang.Math.PI / 6.0)
 	println 'cos(0) = ' + cos(0)
+	println 'cos(PI/2) = ' + cos(java.lang.Math.PI / 2.0)
+	println 'cos(PI/3) = ' + cos(java.lang.Math.PI / 3.0)
 }
 
 public class MultiplyTwo {
