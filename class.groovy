@@ -85,3 +85,23 @@ class Outer03 {
 
 def out03 = new Outer03()
 out03.startThread()
+
+abstract class Abstract {
+	String name
+	
+	abstract def abstractMethod()
+
+	def concreteMethod() {
+		println 'concrete'
+	}
+}
+
+class Concrete extends Abstract {
+	def abstractMethod() {
+		println 'abstract'
+	}
+}
+
+abstractD = new Concrete()
+abstractD.concreteMethod()
+abstractD.abstractMethod()
